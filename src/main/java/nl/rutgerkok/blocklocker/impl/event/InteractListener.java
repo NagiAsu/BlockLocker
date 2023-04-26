@@ -274,19 +274,17 @@ public final class InteractListener extends EventListener {
     @EventHandler(ignoreCancelled = true)
     public void onInventoryMoveItemEvent(InventoryMoveItemEvent event) {
         Block from = getInventoryBlockOrNull(event.getSource());
-        if(from != null) {
+        if (from != null) {
             if (isRedstoneDenied(from)) {
                 event.setCancelled(true);
                 return;
             }
         }
-        Block to = getInventoryBlockOrNull(event.getDestination());
-        if (to != null) {
-            if (isRedstoneDenied(to)) {
-                event.setCancelled(true);
-                return;
-            }
-        }
+        // NagiAsu 強制Allow in
+        /*
+         * Block to = getInventoryBlockOrNull(event.getDestination()); if (to != null) { if
+         * (isRedstoneDenied(to)) { event.setCancelled(true); return; } }
+         */
     }
 
     /**
@@ -490,7 +488,11 @@ public final class InteractListener extends EventListener {
 
         // Actually write the text
         for (int i = 0; i < newLines.length; i++) {
-            sign.setLine(i, newLines[i]);
+            // NagiAsu 修正紅石
+            if (!newLines[i].equalsIgnoreCase("[紅石]")
+                    && !newLines[i].equalsIgnoreCase("[redstone]")) {
+                sign.setLine(i, newLines[i]);
+            }
         }
         sign.update();
 
